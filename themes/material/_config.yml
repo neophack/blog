@@ -22,7 +22,7 @@ menu:
     url: /categories
   link:
     text: 导航
-    url: http://nav.huarenlab.com
+    url: /navi
     target: _blank
 
 # 你的头像url
@@ -44,6 +44,7 @@ color: '#f976dc'
 tags_title: 标签
 archives_title: 文章
 categories_title: 目录
+navis_title: 导航
 
 # 文章截断
 excerpt_render: false
