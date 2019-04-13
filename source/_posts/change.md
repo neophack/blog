@@ -6,4 +6,4 @@ categories: 皮一下
 ---
 ## 原导航站迁移为博客
 
-访问 `http://nav.huarenlab.com` 获取原站内容，感谢您多年来的支持！！！
+访问 `http://www.huarenlab.com/navi` 获取原站内容，感谢您多年来的支持！！！

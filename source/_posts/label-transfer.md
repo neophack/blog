@@ -4,13 +4,16 @@ date: 2018-06-06 21:25:51
 tags: 标签转换
 categories: 深度学习
 ---
-### 说明
+在处理coco数据、imageNet、VOC数据时，需要对数据标签进行转换，本文即提供转换代码
 
+<!-- more -->
 本文主要是对tencent 100k交通标志标记数据转换
 
 临时写的，代码很乱，需要根据实际路径修改
 
 数据下载： http://cg.cs.tsinghua.edu.cn/traffic-sign/tutorial.html
+
+
 
 ### 加载标签
 ```python
