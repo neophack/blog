@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>图像视频标注工具 | 喵</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#f976dc">
+    
+    
+    <meta name="keywords" content="标注">
+    <meta name="description" content="网上开源的标注工具很多，但总是缺少很多功能。在生成中造成极大的困惑，本贴提供可标注矩形、点、线、多边形等的标注工具，具有缩放平移等功能。">
+<meta name="keywords" content="标注">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图像视频标注工具">
+<meta property="og:url" content="http://www.huarenlab.com/2019/11/06/vott-neon/index.html">
+<meta property="og:site_name" content="喵">
+<meta property="og:description" content="网上开源的标注工具很多，但总是缺少很多功能。在生成中造成极大的困惑，本贴提供可标注矩形、点、线、多边形等的标注工具，具有缩放平移等功能。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.huarenlab.com/imgs/2019-11-07-vott-test.png">
+<meta property="og:updated_time" content="2019-11-07T07:59:27.801Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="图像视频标注工具">
+<meta name="twitter:description" content="网上开源的标注工具很多，但总是缺少很多功能。在生成中造成极大的困惑，本贴提供可标注矩形、点、线、多边形等的标注工具，具有缩放平移等功能。">
+<meta name="twitter:image" content="http://www.huarenlab.com/imgs/2019-11-07-vott-test.png">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.0">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Neo~喵</h5>
+          <a href="mailto:neoneone@163.com" title="neoneone@163.com" class="mail">neoneone@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/navi" target="_blank">
+                <i class="icon icon-lg icon-link"></i>
+                导航
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="bottom">
+        <p><span>Neo~喵 &copy; 2015 - 2019</span>
+			<span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+			<span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">Licence</a></span>
+        </p>
+    </div>
+</footer>
+
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">图像视频标注工具</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">图像视频标注工具</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-11-06T12:23:11.000Z" itemprop="datePublished" class="page-time">
+  2019-11-06
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/深度学习/">深度学习</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-vott-neon" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">图像视频标注工具</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-11-06 20:23:11" datetime="2019-11-06T12:23:11.000Z" itemprop="datePublished">2019-11-06</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/深度学习/">深度学习</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>网上开源的标注工具很多，但总是缺少很多功能。在生成中造成极大的困惑，本贴提供可标注矩形、点、线、多边形等的标注工具，具有缩放平移等功能。</p>
+<a id="more"></a>
+<p><a href="https://github.com/Microsoft/VoTT" target="_blank" rel="noopener">vott</a>是微软旗下的标注工具，众所周知，微软大刀总会砍向好的项目，在步入2.0版本时候，开了倒车，没有增加图像缩放功能，还把多边形标注功能砍了。</p>
+<p>我在1.7.2版本上添加了图像缩放功能，增加了多组标签功能，增加标签编辑和搜索功能。</p>
+<p>1.7.2.2版本更新日志</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">添加标签编辑窗口，按E键编辑，按tab键切换标签</span><br><span class="line">按alt键可以使选中框外的其他框锁定</span><br><span class="line">修正图像缩放功能，能够标注一些小目标</span><br><span class="line">添加画人车3D功能，可调整大小</span><br><span class="line">修正鼠标停在目标区域导致下一张不能创建标注的问题</span><br><span class="line">点下一张图会自动保存，当前图s或者ctl+s保存</span><br><span class="line">多段线功能将原矩形拖动改为线条拖动，多边形将原矩形拖动改为多边形内部</span><br><span class="line">将原有的着色改为：1.默认为线条加0.5透明的边沿；2.鼠标悬停为0.8透明矩形；3.线条选中仅显示多段线</span><br><span class="line">多标签问题：由于Pascal导出只能使用一个类别，为了更加直观，以标注颜色为统一，选对应颜色的那个类别，为靠前的类别</span><br><span class="line">还存在的bug: Ctrl点击锚点会删除该点，要移动任意一点才能保存</span><br></pre></td></tr></table></figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/imgs/2019-11-07-vott-test.png" alt title>
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+<p>在线演示<a href="https://neophack.github.io/vott-ct/test/" target="_blank" rel="noopener">github</a></p>
+<p>下载链接<a href="https://www.lanzous.com/i77ui8f" target="_blank" rel="noopener">Windows版本</a></p>
+
+        </div>
+
+        
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/标注/">标注</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.huarenlab.com/2019/11/06/vott-neon/&title=《图像视频标注工具》 — 喵&pic=http://www.huarenlab.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.huarenlab.com/2019/11/06/vott-neon/&title=《图像视频标注工具》 — 喵&source=网上开源的标注工具很多，但总是缺少很多功能。在生成中造成极大的困惑，本贴提供可标注矩形、点、线、多边形等的标注工具，具有缩放平移等功能。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.huarenlab.com/2019/11/06/vott-neon/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《图像视频标注工具》 — 喵&url=http://www.huarenlab.com/2019/11/06/vott-neon/&via=http://www.huarenlab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.huarenlab.com/2019/11/06/vott-neon/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/11/23/singularity-base/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">一种便携式容器</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/10/30/caffe-cuda9-ubuntu1804/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Ubuntu18.04LTS+cuda9.0+caffe(old repo老版本)安装踩坑</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.huarenlab.com/2019/11/06/vott-neon/&title=《图像视频标注工具》 — 喵&pic=http://www.huarenlab.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.huarenlab.com/2019/11/06/vott-neon/&title=《图像视频标注工具》 — 喵&source=网上开源的标注工具很多，但总是缺少很多功能。在生成中造成极大的困惑，本贴提供可标注矩形、点、线、多边形等的标注工具，具有缩放平移等功能。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.huarenlab.com/2019/11/06/vott-neon/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《图像视频标注工具》 — 喵&url=http://www.huarenlab.com/2019/11/06/vott-neon/&via=http://www.huarenlab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.huarenlab.com/2019/11/06/vott-neon/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACHUlEQVR42u3aQY7DMAgF0Nz/0pltpVGTD0xGiv28qlrV8euCAuY44nV+rOv3z18r3zP51mhhYGC8lnFerurhqk+53j85GwYGxj6Mbw/+9vr60+udq7zrs2FgYGDkh8vZSZDFwMDAmDByZFKm5p9iYGBgVFO0Xlmb7PN4LY6BgfFCRvXx//n6kfsNDAyMVzHO4qo+vhouz9bCwMBYmzFp3yfFbZ4CVoctMDAwMPKGfvJOftwJDAMDY1VGXjrmzfrkCqHazru5QsDAwFiakX8hOVBvnCKnFppuGBgYCzHylG7SmJuMU0RFMgYGxgaMXuCrDkDkiWN5pAMDA2Mbxk2JOLi8zNPKami+qcUxMDCWYFQLznm5m1+ONvfEwMDYjJGHyzwEj4JpcqmJgYGxNKPa+q8iqxcSebGNgYGxM2OUog3SyuawBQYGxtKM3sVkb4Asb7HlIRsDA2NtRq8E7V1SRsVnrz2HgYGxNGPeaMtTw17C15xxw8DAWJTRu1BMSBNwoT2HgYGxGSNPCntFaS9A3xTSGBgYWzJGm8bsI16FOw0MDIyFGGdx5ez5yEXhx8LAwFiaMQl2+ThXPnLR+5kwMDB2YPQGLPLmWrV8rZ4BAwNjH0avuJ1Qe/8AN8MWGBgYGMEDesnlJN3EwMDAyMcsqkVvNcg+8r+BgYHxKkY+NtGLckkA7SWIGBgYOzCqIa83qFE9xF8lrBgYGC9n/ABR/EHPvMZ1vgAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="/js/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.0"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.0" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '去哪里了？';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+
+</html>

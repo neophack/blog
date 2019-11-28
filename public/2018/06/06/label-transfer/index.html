@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>深度学习常用标签转换 | 喵</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#f976dc">
+    
+    
+    <meta name="keywords" content="标签转换">
+    <meta name="description" content="在处理coco数据、imageNet、VOC数据时，需要对数据标签进行转换，本文即提供转换代码">
+<meta name="keywords" content="标签转换">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深度学习常用标签转换">
+<meta property="og:url" content="http://www.huarenlab.com/2018/06/06/label-transfer/index.html">
+<meta property="og:site_name" content="喵">
+<meta property="og:description" content="在处理coco数据、imageNet、VOC数据时，需要对数据标签进行转换，本文即提供转换代码">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-13T01:52:14.044Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="深度学习常用标签转换">
+<meta name="twitter:description" content="在处理coco数据、imageNet、VOC数据时，需要对数据标签进行转换，本文即提供转换代码">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.0">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Neo~喵</h5>
+          <a href="mailto:neoneone@163.com" title="neoneone@163.com" class="mail">neoneone@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/navi" target="_blank">
+                <i class="icon icon-lg icon-link"></i>
+                导航
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="bottom">
+        <p><span>Neo~喵 &copy; 2015 - 2019</span>
+			<span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+			<span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">Licence</a></span>
+        </p>
+    </div>
+</footer>
+
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">深度学习常用标签转换</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">深度学习常用标签转换</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-06-06T13:25:51.000Z" itemprop="datePublished" class="page-time">
+  2018-06-06
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/深度学习/">深度学习</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#加载标签"><span class="post-toc-number">1.</span> <span class="post-toc-text">加载标签</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#分析结构"><span class="post-toc-number">2.</span> <span class="post-toc-text">分析结构</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#转换txt"><span class="post-toc-number">3.</span> <span class="post-toc-text">转换txt</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#转换json"><span class="post-toc-number">4.</span> <span class="post-toc-text">转换json</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#json转voc"><span class="post-toc-number">5.</span> <span class="post-toc-text">json转voc</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-label-transfer" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">深度学习常用标签转换</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-06-06 21:25:51" datetime="2018-06-06T13:25:51.000Z" itemprop="datePublished">2018-06-06</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/深度学习/">深度学习</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>在处理coco数据、imageNet、VOC数据时，需要对数据标签进行转换，本文即提供转换代码</p>
+<a id="more"></a>
+<p>本文主要是对tencent 100k交通标志标记数据转换</p>
+<p>临时写的，代码很乱，需要根据实际路径修改</p>
+<p>数据下载： <a href="http://cg.cs.tsinghua.edu.cn/traffic-sign/tutorial.html" target="_blank" rel="noopener">http://cg.cs.tsinghua.edu.cn/traffic-sign/tutorial.html</a></p>
+<h3 id="加载标签"><a href="#加载标签" class="headerlink" title="加载标签"></a>加载标签</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> pylab <span class="keyword">as</span> pl</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> anno_func</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line">datadir = <span class="string">"../../data/"</span></span><br><span class="line"></span><br><span class="line">filedir = datadir + <span class="string">"/annotations.json"</span></span><br><span class="line">ids = open(datadir + <span class="string">"/test/ids.txt"</span>).read().splitlines()</span><br><span class="line"></span><br><span class="line">annos = json.loads(open(filedir).read())</span><br></pre></td></tr></table></figure>
+<h3 id="分析结构"><a href="#分析结构" class="headerlink" title="分析结构"></a>分析结构</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">imgid = random.sample(ids, <span class="number">1</span>)[<span class="number">0</span>]</span><br><span class="line">img=annos[<span class="string">"imgs"</span>][imgid]</span><br><span class="line"><span class="keyword">print</span> (img)</span><br><span class="line">img=annos[<span class="string">"types"</span>]</span><br><span class="line"><span class="keyword">print</span> (img)</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;u&apos;path&apos;: u&apos;test/2468.jpg&apos;, u&apos;objects&apos;: [&#123;u&apos;category&apos;: u&apos;pn&apos;, u&apos;bbox&apos;: &#123;u&apos;xmin&apos;: 1343.2, u&apos;ymin&apos;: 911.2, u&apos;ymax&apos;: 964.0, u&apos;xmax&apos;: 1396.0&#125;, u&apos;ellipse_org&apos;: [[1367.87, 911.552], [1395.46, 937.913], [1368.33, 963.195], [1343.97, 936.988], [1353.99, 958.571], [1387.91, 957.183]], u&apos;ellipse&apos;: [[1369.0028076171875, 937.2377319335938], [51.76936721801758, 52.934967041015625], 139.54888916015625]&#125;, &#123;u&apos;category&apos;: u&apos;pn&apos;, u&apos;bbox&apos;: &#123;u&apos;xmin&apos;: 1197.6, u&apos;ymin&apos;: 940.0, u&apos;ymax&apos;: 963.2, u&apos;xmax&apos;: 1220.8&#125;, u&apos;ellipse_org&apos;: [[1209.01, 940.921], [1219.11, 951.016], [1209.21, 961.043], [1199.25, 951.626], [1201.96, 944.986], [1201.22, 956.775], [1217.55, 945.799]], u&apos;ellipse&apos;: [[1209.0211181640625, 950.5414428710938], [19.53607940673828, 21.289642333984375], 153.71450805664062]&#125;, &#123;u&apos;category&apos;: u&apos;p11&apos;, u&apos;bbox&apos;: &#123;u&apos;xmin&apos;: 229.6, u&apos;ymin&apos;: 963.2, u&apos;ymax&apos;: 1008.8000000000001, u&apos;xmax&apos;: 270.4&#125;, u&apos;ellipse_org&apos;: [[248.171, 963.658], [269.073, 986.158], [249.236, 1008.39], [231.395, 984.827], [262.816, 1002.0], [236.987, 1001.87], [263.881, 971.513]], u&apos;ellipse&apos;: [[249.62039184570312, 985.5843505859375], [37.6942024230957, 44.657630920410156], 177.4745330810547]&#125;, &#123;u&apos;category&apos;: u&apos;pl10&apos;, u&apos;bbox&apos;: &#123;u&apos;xmin&apos;: 235.2, u&apos;ymin&apos;: 1009.6, u&apos;ymax&apos;: 1056.8, u&apos;xmax&apos;: 279.2&#125;, u&apos;ellipse_org&apos;: [[254.683, 1009.92], [277.41, 1032.51], [255.785, 1055.1], [235.813, 1031.96], [240.496, 1047.8], [239.945, 1018.6], [270.386, 1047.11], [271.488, 1017.49]], u&apos;ellipse&apos;: [[255.57847595214844, 1031.8031005859375], [41.567535400390625, 45.633445739746094], 3.8224732875823975]&#125;], u&apos;id&apos;: 2468&#125;</span><br><span class="line">[u&apos;i1&apos;, u&apos;i10&apos;, u&apos;i11&apos;, u&apos;i12&apos;, u&apos;i13&apos;, u&apos;i14&apos;, u&apos;i15&apos;, u&apos;i2&apos;, u&apos;i3&apos;, u&apos;i4&apos;, u&apos;i5&apos;, u&apos;il100&apos;, u&apos;il110&apos;, u&apos;il50&apos;, u&apos;il60&apos;, u&apos;il70&apos;, u&apos;il80&apos;, u&apos;il90&apos;, u&apos;io&apos;, u&apos;ip&apos;, u&apos;p1&apos;, u&apos;p10&apos;, u&apos;p11&apos;, u&apos;p12&apos;, u&apos;p13&apos;, u&apos;p14&apos;, u&apos;p15&apos;, u&apos;p16&apos;, u&apos;p17&apos;, u&apos;p18&apos;, u&apos;p19&apos;, u&apos;p2&apos;, u&apos;p20&apos;, u&apos;p21&apos;, u&apos;p22&apos;, u&apos;p23&apos;, u&apos;p24&apos;, u&apos;p25&apos;, u&apos;p26&apos;, u&apos;p27&apos;, u&apos;p28&apos;, u&apos;p3&apos;, u&apos;p4&apos;, u&apos;p5&apos;, u&apos;p6&apos;, u&apos;p7&apos;, u&apos;p8&apos;, u&apos;p9&apos;, u&apos;pa10&apos;, u&apos;pa12&apos;, u&apos;pa13&apos;, u&apos;pa14&apos;, u&apos;pa8&apos;, u&apos;pb&apos;, u&apos;pc&apos;, u&apos;pg&apos;, u&apos;ph1.5&apos;, u&apos;ph2&apos;, u&apos;ph2.1&apos;, u&apos;ph2.2&apos;, u&apos;ph2.4&apos;, u&apos;ph2.5&apos;, u&apos;ph2.8&apos;, u&apos;ph2.9&apos;, u&apos;ph3&apos;, u&apos;ph3.2&apos;, u&apos;ph3.5&apos;, u&apos;ph3.8&apos;, u&apos;ph4&apos;, u&apos;ph4.2&apos;, u&apos;ph4.3&apos;, u&apos;ph4.5&apos;, u&apos;ph4.8&apos;, u&apos;ph5&apos;, u&apos;ph5.3&apos;, u&apos;ph5.5&apos;, u&apos;pl10&apos;, u&apos;pl100&apos;, u&apos;pl110&apos;, u&apos;pl120&apos;, u&apos;pl15&apos;, u&apos;pl20&apos;, u&apos;pl25&apos;, u&apos;pl30&apos;, u&apos;pl35&apos;, u&apos;pl40&apos;, u&apos;pl5&apos;, u&apos;pl50&apos;, u&apos;pl60&apos;, u&apos;pl65&apos;, u&apos;pl70&apos;, u&apos;pl80&apos;, u&apos;pl90&apos;, u&apos;pm10&apos;, u&apos;pm13&apos;, u&apos;pm15&apos;, u&apos;pm1.5&apos;, u&apos;pm2&apos;, u&apos;pm20&apos;, u&apos;pm25&apos;, u&apos;pm30&apos;, u&apos;pm35&apos;, u&apos;pm40&apos;, u&apos;pm46&apos;, u&apos;pm5&apos;, u&apos;pm50&apos;, u&apos;pm55&apos;, u&apos;pm8&apos;, u&apos;pn&apos;, u&apos;pne&apos;, u&apos;po&apos;, u&apos;pr10&apos;, u&apos;pr100&apos;, u&apos;pr20&apos;, u&apos;pr30&apos;, u&apos;pr40&apos;, u&apos;pr45&apos;, u&apos;pr50&apos;, u&apos;pr60&apos;, u&apos;pr70&apos;, u&apos;pr80&apos;, u&apos;ps&apos;, u&apos;pw2&apos;, u&apos;pw2.5&apos;, u&apos;pw3&apos;, u&apos;pw3.2&apos;, u&apos;pw3.5&apos;, u&apos;pw4&apos;, u&apos;pw4.2&apos;, u&apos;pw4.5&apos;, u&apos;w1&apos;, u&apos;w10&apos;, u&apos;w12&apos;, u&apos;w13&apos;, u&apos;w16&apos;, u&apos;w18&apos;, u&apos;w20&apos;, u&apos;w21&apos;, u&apos;w22&apos;, u&apos;w24&apos;, u&apos;w28&apos;, u&apos;w3&apos;, u&apos;w30&apos;, u&apos;w31&apos;, u&apos;w32&apos;, u&apos;w34&apos;, u&apos;w35&apos;, u&apos;w37&apos;, u&apos;w38&apos;, u&apos;w41&apos;, u&apos;w42&apos;, u&apos;w43&apos;, u&apos;w44&apos;, u&apos;w45&apos;, u&apos;w46&apos;, u&apos;w47&apos;, u&apos;w48&apos;, u&apos;w49&apos;, u&apos;w5&apos;, u&apos;w50&apos;, u&apos;w55&apos;, u&apos;w56&apos;, u&apos;w57&apos;, u&apos;w58&apos;, u&apos;w59&apos;, u&apos;w60&apos;, u&apos;w62&apos;, u&apos;w63&apos;, u&apos;w66&apos;, u&apos;w8&apos;, u&apos;wo&apos;, u&apos;i6&apos;, u&apos;i7&apos;, u&apos;i8&apos;, u&apos;i9&apos;, u&apos;ilx&apos;, u&apos;p29&apos;, u&apos;w29&apos;, u&apos;w33&apos;, u&apos;w36&apos;, u&apos;w39&apos;, u&apos;w4&apos;, u&apos;w40&apos;, u&apos;w51&apos;, u&apos;w52&apos;, u&apos;w53&apos;, u&apos;w54&apos;, u&apos;w6&apos;, u&apos;w61&apos;, u&apos;w64&apos;, u&apos;w65&apos;, u&apos;w67&apos;, u&apos;w7&apos;, u&apos;w9&apos;, u&apos;pax&apos;, u&apos;pd&apos;, u&apos;pe&apos;, u&apos;phx&apos;, u&apos;plx&apos;, u&apos;pmx&apos;, u&apos;pnl&apos;, u&apos;prx&apos;, u&apos;pwx&apos;, u&apos;w11&apos;, u&apos;w14&apos;, u&apos;w15&apos;, u&apos;w17&apos;, u&apos;w19&apos;, u&apos;w2&apos;, u&apos;w23&apos;, u&apos;w25&apos;, u&apos;w26&apos;, u&apos;w27&apos;, u&apos;pl0&apos;, u&apos;pl4&apos;, u&apos;pl3&apos;, u&apos;pm2.5&apos;, u&apos;ph4.4&apos;, u&apos;pn40&apos;, u&apos;ph3.3&apos;, u&apos;ph2.6&apos;]</span><br></pre></td></tr></table></figure>
+<h3 id="转换txt"><a href="#转换txt" class="headerlink" title="转换txt"></a>转换txt</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">cnt=<span class="number">0</span></span><br><span class="line">resultlistfile=open(<span class="string">'test.txt'</span>,<span class="string">'w'</span>)</span><br><span class="line">idsfile=open(<span class="string">'ids.txt'</span>,<span class="string">'w'</span>)</span><br><span class="line"><span class="keyword">for</span> imgid <span class="keyword">in</span> ids:</span><br><span class="line">    <span class="keyword">if</span> int(imgid)&lt;<span class="number">40000</span>:</span><br><span class="line">        idsfile.write(imgid+<span class="string">'\n'</span>)</span><br><span class="line">        img=annos[<span class="string">"imgs"</span>][imgid]</span><br><span class="line">        cnt+=<span class="number">1</span></span><br><span class="line">        <span class="keyword">for</span> obj <span class="keyword">in</span> img[<span class="string">'objects'</span>]:</span><br><span class="line">            box = obj[<span class="string">'bbox'</span>]</span><br><span class="line">            ss = obj[<span class="string">'category'</span>]</span><br><span class="line">            resstr=imgid+<span class="string">' '</span>+ss+<span class="string">' '</span>+str(box[<span class="string">'xmin'</span>])+<span class="string">' '</span>+str(box[<span class="string">'ymin'</span>])+<span class="string">' '</span>+str(box[<span class="string">'xmax'</span>])+<span class="string">' '</span>+str(box[<span class="string">'ymax'</span>])+<span class="string">' 0 '</span>+str(cnt)</span><br><span class="line">            resultlistfile.write(resstr+<span class="string">'\n'</span>)</span><br><span class="line">            <span class="keyword">print</span> (resstr)</span><br><span class="line">        </span><br><span class="line">idsfile.close()</span><br><span class="line">resultlistfile.close()</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">10056 pne 414 877 431 909 0 1</span><br><span class="line">10056 i5 452 886 468 916 0 1</span><br><span class="line">10056 pne 1215 928 1237 950 0 1</span><br><span class="line">10056 i5 1274 927 1294 949 0 1</span><br><span class="line">10056 pne 2016 910 2032 934 0 1</span><br><span class="line">10063 pr20 1637 949 1678 1002 0 2</span><br><span class="line">10063 p27 1371 701 1426 759 0 2</span><br><span class="line">10063 po 1482 692 1543 753 0 2</span><br><span class="line">10063 pl40 1370 774 1422 834 0 2</span><br><span class="line">10063 ph4.5 1480 765 1543 828 0 2</span><br><span class="line">10128 pl40 1349 539 1450 643 0 3</span><br><span class="line">10128 p11 1476 545 1570 650 0 3</span><br><span class="line">10128 pn 1584 562 1684 662 0 3</span><br><span class="line">1012 pl30 645 516 735 603 0 4</span><br><span class="line">1012 pm20 742 512 837 600 0 4</span><br><span class="line">1012 p26 843 487 938 572 0 4</span><br><span class="line">1012 ph4.5 531 752 618 840 0 4</span><br><span class="line">1012 p9 529 847 621 941 0 4</span><br></pre></td></tr></table></figure>
+<h3 id="转换json"><a href="#转换json" class="headerlink" title="转换json"></a>转换json</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">resultcont=open(<span class="string">'test.txt'</span>,<span class="string">'r'</span>)</span><br><span class="line"><span class="comment">#print('namelist',resultcont)</span></span><br><span class="line">perid=<span class="string">''</span></span><br><span class="line">imgid=<span class="string">''</span></span><br><span class="line"><span class="comment"># types=["1","2","3","4","5","6","7"]</span></span><br><span class="line"><span class="comment"># trainotest='train'</span></span><br><span class="line">objs=[]</span><br><span class="line">results = &#123;&#125;</span><br><span class="line"><span class="keyword">for</span> resultline <span class="keyword">in</span> resultcont.read().split(<span class="string">'\n'</span>):</span><br><span class="line">    <span class="keyword">if</span> resultline:</span><br><span class="line">        ressplit=resultline.split(<span class="string">' '</span>)</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">not</span> perid==ressplit[<span class="number">0</span>]):</span><br><span class="line">            perid=ressplit[<span class="number">0</span>]</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> (<span class="keyword">not</span> imgid == <span class="string">''</span>):</span><br><span class="line">                <span class="comment">#print(objs)</span></span><br><span class="line">                results[imgid] = &#123;<span class="string">"objects"</span>:objs,<span class="string">"id"</span>:imgid,<span class="string">"path"</span>:<span class="string">""</span>+trainotest+<span class="string">"/"</span>+imgid+<span class="string">".jpg"</span>&#125;</span><br><span class="line">            objs=[]</span><br><span class="line">        mobj = &#123;<span class="string">"bbox"</span>:dict(zip([<span class="string">"xmin"</span>,<span class="string">"ymin"</span>,<span class="string">"xmax"</span>,<span class="string">"ymax"</span>],</span><br><span class="line">                                [float(ressplit[<span class="number">2</span>]),float(ressplit[<span class="number">3</span>]),float(ressplit[<span class="number">4</span>]),float(ressplit[<span class="number">5</span>])])), </span><br><span class="line">                    <span class="string">"category"</span>:str(ressplit[<span class="number">1</span>])&#125;</span><br><span class="line">        objs.append(mobj)</span><br><span class="line">        <span class="comment">#print(ressplit[2:6])</span></span><br><span class="line">        imgid=ressplit[<span class="number">0</span>]</span><br><span class="line">results[imgid] = &#123;<span class="string">"objects"</span>:objs,<span class="string">"id"</span>:imgid,<span class="string">"path"</span>:<span class="string">""</span>+trainotest+<span class="string">"/"</span>+imgid+<span class="string">".jpg"</span>&#125;</span><br><span class="line"></span><br><span class="line">results_annos = &#123;<span class="string">"imgs"</span>:results,<span class="string">"types"</span>:types&#125;   </span><br><span class="line"><span class="keyword">print</span> (results_annos)</span><br><span class="line">open(<span class="string">"../../Src1/annotations.json"</span>, <span class="string">"w"</span>).write(json.dumps(results_annos))</span><br></pre></td></tr></table></figure>
+<h3 id="json转voc"><a href="#json转voc" class="headerlink" title="json转voc"></a>json转voc</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> json</span><br><span class="line"><span class="keyword">import</span> pylab <span class="keyword">as</span> pl</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> cv2</span><br><span class="line"><span class="keyword">import</span> anno_func</span><br><span class="line">%matplotlib inline</span><br><span class="line"></span><br><span class="line">datadir = <span class="string">"../../Src1/"</span></span><br><span class="line">trainotest=<span class="string">'train'</span></span><br><span class="line">filedir = datadir + <span class="string">"/annotations.json"</span></span><br><span class="line">ids = open(datadir + <span class="string">"/"</span>+trainotest+<span class="string">"/ids.txt"</span>).read().splitlines()</span><br><span class="line"></span><br><span class="line">annos = json.loads(open(filedir).read())</span><br><span class="line"></span><br><span class="line">cnt=<span class="number">0</span></span><br><span class="line">resultlistfile=open(<span class="string">'test.txt'</span>,<span class="string">'w'</span>)</span><br><span class="line"><span class="keyword">for</span> imgid <span class="keyword">in</span> ids:</span><br><span class="line">    <span class="keyword">if</span> int(imgid)&lt;<span class="number">40000</span>:</span><br><span class="line">        img=annos[<span class="string">"imgs"</span>][imgid]</span><br><span class="line">        cnt+=<span class="number">1</span></span><br><span class="line">        node_root = Element(<span class="string">'annotation'</span>)</span><br><span class="line"></span><br><span class="line">        node_folder = SubElement(node_root, <span class="string">'folder'</span>)</span><br><span class="line">        node_folder.text = <span class="string">'train'</span></span><br><span class="line"></span><br><span class="line">        node_filename = SubElement(node_root, <span class="string">'filename'</span>)</span><br><span class="line">        node_filename.text = str(imgid)+<span class="string">'.jpg'</span></span><br><span class="line">        </span><br><span class="line">        node_filename = SubElement(node_root, <span class="string">'path'</span>)</span><br><span class="line">        node_filename.text = datadir+trainotest+<span class="string">"/"</span>+str(imgid)+<span class="string">'.jpg'</span></span><br><span class="line"></span><br><span class="line">        node_size = SubElement(node_root, <span class="string">'size'</span>)</span><br><span class="line">        node_width = SubElement(node_size, <span class="string">'width'</span>)</span><br><span class="line">        node_width.text = <span class="string">'2048'</span></span><br><span class="line"></span><br><span class="line">        node_height = SubElement(node_size, <span class="string">'height'</span>)</span><br><span class="line">        node_height.text = <span class="string">'2048'</span></span><br><span class="line"></span><br><span class="line">        node_depth = SubElement(node_size, <span class="string">'depth'</span>)</span><br><span class="line">        node_depth.text = <span class="string">'3'</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span> obj <span class="keyword">in</span> img[<span class="string">'objects'</span>]:</span><br><span class="line">            box = obj[<span class="string">'bbox'</span>]</span><br><span class="line">            ss = obj[<span class="string">'category'</span>]</span><br><span class="line">            str(box[<span class="string">'xmin'</span>])+<span class="string">' '</span>+str(box[<span class="string">'ymin'</span>])+<span class="string">' '</span>+str(box[<span class="string">'xmax'</span>])+<span class="string">' '</span>+str(box[<span class="string">'ymax'</span>])+<span class="string">' 0 '</span>+str(cnt)</span><br><span class="line">            </span><br><span class="line"></span><br><span class="line">            node_object = SubElement(node_root, <span class="string">'object'</span>)</span><br><span class="line">            node_name = SubElement(node_object, <span class="string">'name'</span>)</span><br><span class="line">            node_name.text = ss</span><br><span class="line">            node_difficult = SubElement(node_object, <span class="string">'difficult'</span>)</span><br><span class="line">            node_difficult.text = <span class="string">'0'</span></span><br><span class="line">            node_bndbox = SubElement(node_object, <span class="string">'bndbox'</span>)</span><br><span class="line">            node_xmin = SubElement(node_bndbox, <span class="string">'xmin'</span>)</span><br><span class="line">            node_xmin.text = str(int(box[<span class="string">'xmin'</span>]))</span><br><span class="line">            node_ymin = SubElement(node_bndbox, <span class="string">'ymin'</span>)</span><br><span class="line">            node_ymin.text = str(int(box[<span class="string">'ymin'</span>]))</span><br><span class="line">            node_xmax = SubElement(node_bndbox, <span class="string">'xmax'</span>)</span><br><span class="line">            node_xmax.text = str(int(box[<span class="string">'xmax'</span>]))</span><br><span class="line">            node_ymax = SubElement(node_bndbox, <span class="string">'ymax'</span>)</span><br><span class="line">            node_ymax.text = str(int(box[<span class="string">'ymax'</span>]))</span><br><span class="line"></span><br><span class="line">        xml = tostring(node_root, pretty_print=<span class="keyword">True</span>)  <span class="comment">#格式化显示，该换行的换行</span></span><br><span class="line">        dom = parseString(xml)</span><br><span class="line">            <span class="comment">#print xml</span></span><br><span class="line">        xmlfile=open(datadir+<span class="string">"xml/"</span>+imgid+<span class="string">'.xml'</span>,<span class="string">'w'</span>)</span><br><span class="line">        xmlfile.write(xml)</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/标签转换/">标签转换</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.huarenlab.com/2018/06/06/label-transfer/&title=《深度学习常用标签转换》 — 喵&pic=http://www.huarenlab.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.huarenlab.com/2018/06/06/label-transfer/&title=《深度学习常用标签转换》 — 喵&source=在处理coco数据、imageNet、VOC数据时，需要对数据标签进行转换，本文即提供转换代码" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.huarenlab.com/2018/06/06/label-transfer/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深度学习常用标签转换》 — 喵&url=http://www.huarenlab.com/2018/06/06/label-transfer/&via=http://www.huarenlab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.huarenlab.com/2018/06/06/label-transfer/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/09/17/yolo-train/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">yolo训练经验</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/05/06/change/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">迁移说明</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.huarenlab.com/2018/06/06/label-transfer/&title=《深度学习常用标签转换》 — 喵&pic=http://www.huarenlab.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.huarenlab.com/2018/06/06/label-transfer/&title=《深度学习常用标签转换》 — 喵&source=在处理coco数据、imageNet、VOC数据时，需要对数据标签进行转换，本文即提供转换代码" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.huarenlab.com/2018/06/06/label-transfer/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《深度学习常用标签转换》 — 喵&url=http://www.huarenlab.com/2018/06/06/label-transfer/&via=http://www.huarenlab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.huarenlab.com/2018/06/06/label-transfer/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACHUlEQVR42u3aS27DMAwFwN7/0um2QGHnkVQCWBqvgiC1NV6w/P38xNfrz/X/m+S6v/PVUxZfGBgYj2Ukj//ON9WXhYGBcRojCYX5768OkUfL6rMwMDAw7oNgNTjeHxcDAwNjzohuGofdJHHEwMDAyIvYHHmfDuZH/0gtjoGB8UBG3nX//uePzDcwMDAexeiNIXuf88OVT4WBgbE1Iw9wVUyvWM3BGBgY5zCqaxbJ8kRexN5TC8EaAwPjAMbkAfNKszoivQy4GBgYBzCS0FkdLq4aDJR7gRgYGJsyes36pPisrost2BbBwMDYlLFq5WK+hFFuw2FgYGzNSP74cxOJJPjmARoDA2NvRnXRIW+69RLHXizFwMDYlbE2jCakahJZ2BbBwMA4mFFt7ud3mLTYMDAwTmNUVygmeWiviG3ujGBgYGzEmLS68lHBJIi/eZUYGBhbM6qLX3mSNxkGNNfOMDAwtmZUC9RqkpcvnOVzjCSFxcDA2Ikx179aV69kffN/AwMDY2vG/U/nITVJOnvJIgYGxjmMalE6KUHzZY5CExADA2NTxiSZm7T1ey25y7thYGBszVgWs1ttu7WNOQwMjL0ZSZDNA1+ePk4CLgYGxpmM6lpDPjxY0EpLXhMGBgZGkORNBp/Vhl1zMICBgXEMo1fcTtpn0QoaBgbGAYzqykWSrlUXwnoJIgYGxgmMXsjrHaLZShuHbAwMjMcyfgHvv9E/3L6fJAAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="/js/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.0"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.0" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '去哪里了？';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+
+</html>

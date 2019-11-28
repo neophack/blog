@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Ubuntu18.04LTS+cuda9.0+caffe(old repo老版本)安装踩坑 | 喵</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#f976dc">
+    
+    
+    <meta name="keywords" content="caffe配置">
+    <meta name="description" content="在Ubuntu上安装cuda9.0，并配置caffe环境，caffe为2016年的版本，由于改动太多，移植到新版麻烦，这里就安装教程和遇到问题做一些记录">
+<meta name="keywords" content="caffe配置">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Ubuntu18.04LTS+cuda9.0+caffe(old repo老版本)安装踩坑">
+<meta property="og:url" content="http://www.huarenlab.com/2018/10/30/caffe-cuda9-ubuntu1804/index.html">
+<meta property="og:site_name" content="喵">
+<meta property="og:description" content="在Ubuntu上安装cuda9.0，并配置caffe环境，caffe为2016年的版本，由于改动太多，移植到新版麻烦，这里就安装教程和遇到问题做一些记录">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://www.huarenlab.com/imgs/2018-10-30-caffe-train.jpg">
+<meta property="og:image" content="http://www.huarenlab.com/imgs/2018-10-30-nvidia-smi.jpg">
+<meta property="og:updated_time" content="2019-04-13T01:52:14.044Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Ubuntu18.04LTS+cuda9.0+caffe(old repo老版本)安装踩坑">
+<meta name="twitter:description" content="在Ubuntu上安装cuda9.0，并配置caffe环境，caffe为2016年的版本，由于改动太多，移植到新版麻烦，这里就安装教程和遇到问题做一些记录">
+<meta name="twitter:image" content="http://www.huarenlab.com/imgs/2018-10-30-caffe-train.jpg">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.0">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Neo~喵</h5>
+          <a href="mailto:neoneone@163.com" title="neoneone@163.com" class="mail">neoneone@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/navi" target="_blank">
+                <i class="icon icon-lg icon-link"></i>
+                导航
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="bottom">
+        <p><span>Neo~喵 &copy; 2015 - 2019</span>
+			<span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+			<span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">Licence</a></span>
+        </p>
+    </div>
+</footer>
+
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Ubuntu18.04LTS+cuda9.0+caffe(old repo老版本)安装踩坑</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Ubuntu18.04LTS+cuda9.0+caffe(old repo老版本)安装踩坑</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-10-30T12:15:51.000Z" itemprop="datePublished" class="page-time">
+  2018-10-30
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/深度学习/">深度学习</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-常用编译需要的软件"><span class="post-toc-number">1.</span> <span class="post-toc-text">1.常用编译需要的软件</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-安装caffe需要的库"><span class="post-toc-number">2.</span> <span class="post-toc-text">2.安装caffe需要的库</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-根据自己配置修改Makefile-config，主要是是否使用cudnn、仅使用CPU、cuda9注意删除CUDA-ARCH-中的20和21两行"><span class="post-toc-number">3.</span> <span class="post-toc-text">3.根据自己配置修改Makefile.config，主要是是否使用cudnn、仅使用CPU、cuda9注意删除CUDA_ARCH 中的20和21两行</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-编译"><span class="post-toc-number">4.</span> <span class="post-toc-text">4.编译</span></a></li></ol><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#注意"><span class="post-toc-number"></span> <span class="post-toc-text">注意</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-如果报错如下，protobuf版本不一致"><span class="post-toc-number">1.</span> <span class="post-toc-text">1 如果报错如下，protobuf版本不一致</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-如果报错如下，为g-版本不兼容"><span class="post-toc-number">2.</span> <span class="post-toc-text">2 如果报错如下，为g++版本不兼容</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-如果报错如下，anaconda库冲突"><span class="post-toc-number">3.</span> <span class="post-toc-text">3 如果报错如下，anaconda库冲突</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-cublas报错"><span class="post-toc-number">4.</span> <span class="post-toc-text">4 cublas报错</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#训练模型"><span class="post-toc-number"></span> <span class="post-toc-text">训练模型</span></a>
+        </li></nav>
+    </aside>
+    
+<article id="post-caffe-cuda9-ubuntu1804" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Ubuntu18.04LTS+cuda9.0+caffe(old repo老版本)安装踩坑</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-10-30 20:15:51" datetime="2018-10-30T12:15:51.000Z" itemprop="datePublished">2018-10-30</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/深度学习/">深度学习</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>在Ubuntu上安装cuda9.0，并配置caffe环境，caffe为2016年的版本，由于改动太多，移植到新版麻烦，这里就安装教程和遇到问题做一些记录</p>
+<a id="more"></a>
+<h3 id="1-常用编译需要的软件"><a href="#1-常用编译需要的软件" class="headerlink" title="1.常用编译需要的软件"></a>1.常用编译需要的软件</h3><p>首先安装必要软件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install make cmake</span><br></pre></td></tr></table></figure></p>
+<p>编译GPU版需要安装驱动<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">chmod 777 NVIDIA-Linux-x86_64-410.73.run</span><br><span class="line">sudo ./NVIDIA-Linux-x86_64-410.73.run --no-opengl-files</span><br><span class="line"><span class="comment"># --no-opengl-files适合笔记本用户安装，可以防止桌面分辨率异常，台式机可以不加</span></span><br><span class="line">chmod 777 cuda_9.0.176_384.81_linux.run</span><br><span class="line">sudo ./cuda_9.0.176_384.81_linux.run</span><br><span class="line"><span class="comment"># cuda安装时候提示安装驱动，选n</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="2-安装caffe需要的库"><a href="#2-安装caffe需要的库" class="headerlink" title="2.安装caffe需要的库"></a>2.安装caffe需要的库</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev protobuf-compiler</span><br><span class="line">sudo apt install --no-install-recommends libboost-all-dev</span><br><span class="line">sudo apt install libatlas-base-dev</span><br><span class="line">sudo apt install libgflags-dev libgoogle-glog-dev liblmdb-dev</span><br></pre></td></tr></table></figure>
+<h3 id="3-根据自己配置修改Makefile-config，主要是是否使用cudnn、仅使用CPU、cuda9注意删除CUDA-ARCH-中的20和21两行"><a href="#3-根据自己配置修改Makefile-config，主要是是否使用cudnn、仅使用CPU、cuda9注意删除CUDA-ARCH-中的20和21两行" class="headerlink" title="3.根据自己配置修改Makefile.config，主要是是否使用cudnn、仅使用CPU、cuda9注意删除CUDA_ARCH 中的20和21两行"></a>3.根据自己配置修改Makefile.config，主要是是否使用cudnn、仅使用CPU、cuda9注意删除CUDA_ARCH 中的20和21两行</h3><h3 id="4-编译"><a href="#4-编译" class="headerlink" title="4.编译"></a>4.编译</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make all</span><br></pre></td></tr></table></figure>
+<h1 id="注意"><a href="#注意" class="headerlink" title="注意"></a>注意</h1><h3 id="1-如果报错如下，protobuf版本不一致"><a href="#1-如果报错如下，protobuf版本不一致" class="headerlink" title="1 如果报错如下，protobuf版本不一致"></a>1 如果报错如下，protobuf版本不一致</h3><pre><code>.build_release/src/caffe/proto/caffe.pb.h:17:2: error: #error This file was generated by an older version of protoc which is
+</code></pre><p>默认protobuf为3.0版本，旧版2.5版本安装如下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget http://archive.ubuntu.com/ubuntu/pool/main/p/protobuf/libprotobuf8_2.5.0-9ubuntu1_amd64.deb</span><br><span class="line">wget http://archive.ubuntu.com/ubuntu/pool/main/p/protobuf/libprotobuf-lite8_2.5.0-9ubuntu1_amd64.deb</span><br><span class="line">wget http://archive.ubuntu.com/ubuntu/pool/main/p/protobuf/libprotobuf-dev_2.5.0-9ubuntu1_amd64.deb</span><br><span class="line">sudo dpkg -i libprotobuf8_2.5.0-9ubuntu1_amd64.deb libprotobuf-lite8_2.5.0-9ubuntu1_amd64.deb libprotobuf-dev_2.5.0-9ubuntu1_amd64.deb</span><br></pre></td></tr></table></figure></p>
+<p>更多库下载</p>
+<p><a href="https://ubuntu.pkgs.org/14.04/ubuntu-main-amd64/libprotobuf-lite8_2.5.0-9ubuntu1_amd64.deb.html" target="_blank" rel="noopener">https://ubuntu.pkgs.org/14.04/ubuntu-main-amd64/libprotobuf-lite8_2.5.0-9ubuntu1_amd64.deb.html</a></p>
+<h3 id="2-如果报错如下，为g-版本不兼容"><a href="#2-如果报错如下，为g-版本不兼容" class="headerlink" title="2 如果报错如下，为g++版本不兼容"></a>2 如果报错如下，为g++版本不兼容</h3><pre><code>src/caffe/layers/contrastive_loss_layer.cpp:56:30: error: no matching function for call to ‘max(float, double)’
+
+ Dtype dist = std::max(margin - sqrt(dist_sq_.cpu_data()[i]), 0.0);
+</code></pre><p>通过安装低版本gcc g++解决<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo apt install gcc-4.8 g++-4.8</span><br><span class="line"><span class="built_in">cd</span> /usr/bin</span><br><span class="line">sudo ln -s gcc-4.8 gcc</span><br><span class="line">sudo ln -s g++-4.8 g++</span><br></pre></td></tr></table></figure></p>
+<h3 id="3-如果报错如下，anaconda库冲突"><a href="#3-如果报错如下，anaconda库冲突" class="headerlink" title="3 如果报错如下，anaconda库冲突"></a>3 如果报错如下，anaconda库冲突</h3><pre><code>CXX/LD -o .build_release/tools/upgrade_net_proto_text.bin
+.build_release/tools/upgrade_net_proto_text.o: In function `main&apos;:
+/usr/include/c++/5/bits/basic_string.tcc:219: undefined reference to `std::__cxx11::basic_string&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;::_M_create(unsigned long&amp;, unsigned long)&apos;
+/usr/lib/gcc/x86_64-linux-gnu/5/../../../x86_64-linux-gnu/libglog.so: undefined reference to `vtable for std::__cxx11::basic_stringbuf&lt;char, std::char_traits&lt;char&gt;, std::allocator&lt;char&gt; &gt;@GLIBCXX_3.4.21&apos;
+</code></pre><p> 在makefile.config修改include路径lib路径等，编译pycaffe时再添加Python的include路径lib路径<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Whatever else you find you need goes here.</span></span><br><span class="line"><span class="comment">#INCLUDE_DIRS := $(PYTHON_INCLUDE) /usr/local/include $(CUDNN_PATH)</span></span><br><span class="line"><span class="comment">#LIBRARY_DIRS := $(PYTHON_LIB) /usr/local/lib /usr/lib $(CUDNN_PATH)</span></span><br><span class="line">INCLUDE_DIRS := /usr/<span class="built_in">local</span>/include /usr/include/hdf5/serial /usr/include/python2.7 $(CUDNN_PATH)</span><br><span class="line">LIBRARY_DIRS := /usr/<span class="built_in">local</span>/lib /usr/lib /usr/lib/x86_64-linux-gnu/hdf5/serial $(CUDNN_PATH)</span><br></pre></td></tr></table></figure></p>
+<h3 id="4-cublas报错"><a href="#4-cublas报错" class="headerlink" title="4 cublas报错"></a>4 cublas报错</h3><pre><code>F1030 16:15:43.990840  1937 math_functions.cu:28] Check failed: status == CUBLAS_STATUS_SUCCESS (13 vs. 0)  CUBLAS_STATUS_EXECUTION_FAILED
+</code></pre><p>安装CUDA9.0会出现以上错误</p>
+<p>通过安装补丁<a href="https://developer.nvidia.com/cuda-90-download-archive?target_os=Linux&amp;target_arch=x86_64&amp;target_distro=Ubuntu&amp;target_version=1704&amp;target_type=runfilelocal" target="_blank" rel="noopener">Patch 2 (Released Mar 5, 2018)</a>解决</p>
+<h1 id="训练模型"><a href="#训练模型" class="headerlink" title="训练模型"></a>训练模型</h1><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/imgs/2018-10-30-caffe-train.jpg" alt="caffe-train" title>
+                </div>
+                <div class="image-caption">caffe-train</div>
+            </figure>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/imgs/2018-10-30-nvidia-smi.jpg" alt="GPU" title>
+                </div>
+                <div class="image-caption">GPU</div>
+            </figure>
+<p>声明：如有错误或者侵权请邮箱联系我</p>
+
+        </div>
+
+        
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/caffe配置/">caffe配置</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.huarenlab.com/2018/10/30/caffe-cuda9-ubuntu1804/&title=《Ubuntu18.04LTS+cuda9.0+caffe(old repo老版本)安装踩坑》 — 喵&pic=http://www.huarenlab.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.huarenlab.com/2018/10/30/caffe-cuda9-ubuntu1804/&title=《Ubuntu18.04LTS+cuda9.0+caffe(old repo老版本)安装踩坑》 — 喵&source=在Ubuntu上安装cuda9.0，并配置caffe环境，caffe为2016年的版本，由于改动太多，移植到新版麻烦，这里就安装教程和遇到问题做一些记录" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.huarenlab.com/2018/10/30/caffe-cuda9-ubuntu1804/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Ubuntu18.04LTS+cuda9.0+caffe(old repo老版本)安装踩坑》 — 喵&url=http://www.huarenlab.com/2018/10/30/caffe-cuda9-ubuntu1804/&via=http://www.huarenlab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.huarenlab.com/2018/10/30/caffe-cuda9-ubuntu1804/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/11/06/vott-neon/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">图像视频标注工具</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/09/17/yolo-train/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">yolo训练经验</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.huarenlab.com/2018/10/30/caffe-cuda9-ubuntu1804/&title=《Ubuntu18.04LTS+cuda9.0+caffe(old repo老版本)安装踩坑》 — 喵&pic=http://www.huarenlab.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.huarenlab.com/2018/10/30/caffe-cuda9-ubuntu1804/&title=《Ubuntu18.04LTS+cuda9.0+caffe(old repo老版本)安装踩坑》 — 喵&source=在Ubuntu上安装cuda9.0，并配置caffe环境，caffe为2016年的版本，由于改动太多，移植到新版麻烦，这里就安装教程和遇到问题做一些记录" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.huarenlab.com/2018/10/30/caffe-cuda9-ubuntu1804/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Ubuntu18.04LTS+cuda9.0+caffe(old repo老版本)安装踩坑》 — 喵&url=http://www.huarenlab.com/2018/10/30/caffe-cuda9-ubuntu1804/&via=http://www.huarenlab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.huarenlab.com/2018/10/30/caffe-cuda9-ubuntu1804/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJklEQVR42u3aQW7DMAwEwPz/0+m1QBBjV3QLWBqdggS2NT4wFMnXK17vX+vbr9ffXN/n/bFef7EwMDAey3hfrs9tJZvI1zUjuRYDA+McxnUYvWYkvDZOts/CwMDASFK9ZLvfPs9fGQYGBsbaw9oD8D8FXAwMjMcy8kPmvAw3OdzecBbHwMB4ICOvuv//5z/pb2BgYDyKsVbET6h52/KG1gIGBsbWjEkLM/81v8Mo9cTAwDiGMWkPzEfE2gQRAwPjHMbaTduUcV7IS67CwMDYj5G0DNuUbq3NcFu5DQMDY1NGHhbbVsHaMEfb+MTAwNibkR8y8zRx7UVMim4YGBh7MyYBN7kqSUPzgbCvwR0DA+MwRj4q0QbKdoCjOOhiYGAcw5gExyTdnCeOX18ZBgbGMYykWbg2DJGD22MtBgbGOYy8ELbYYowLfMVsSG3FwMB4NqMuby0Vy5Lkcm3UDAMD4wRGvum2JdAOmS02VjEwMLZmtGWyfLRiLeHLXwoGBsZpjHZga22cq71D3TzAwMA4hjFvVSbBMfmmSAQxMDAOYLQDE/ceU9st1i0KDAyMhzPe5coxk4GMerwDAwNja0abX7XIPAVM/hnqIQwMDIyNGPnm5mG3fVYRcDEwMA5g3Pv4tXRwLfRjYGBgtGMQkwpf3iq4LeBiYGBsylhD5o3SdqQDAwPjHEZ7sExKZpN75u1PDAyMExjtiMMkBZy0RW9oamJgYDyP8QMeeq1j4eNu1wAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="/js/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.0"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.0" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '去哪里了？';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+
+</html>

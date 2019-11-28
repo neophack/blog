@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>一种便携式容器 | 喵</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#f976dc">
+    
+    
+    <meta name="keywords" content="docker,容器,singularity">
+    <meta name="description" content="内网环境安装docker和nvidia docker繁琐，本文介绍一种便携式容器singularity，安装简便（主要是2版本），仓库就可以直接安装。本文并介绍如何将docker镜像转换到singularity部署。">
+<meta name="keywords" content="docker,容器,singularity">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一种便携式容器">
+<meta property="og:url" content="http://www.huarenlab.com/2019/11/23/singularity-base/index.html">
+<meta property="og:site_name" content="喵">
+<meta property="og:description" content="内网环境安装docker和nvidia docker繁琐，本文介绍一种便携式容器singularity，安装简便（主要是2版本），仓库就可以直接安装。本文并介绍如何将docker镜像转换到singularity部署。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-28T01:47:31.383Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一种便携式容器">
+<meta name="twitter:description" content="内网环境安装docker和nvidia docker繁琐，本文介绍一种便携式容器singularity，安装简便（主要是2版本），仓库就可以直接安装。本文并介绍如何将docker镜像转换到singularity部署。">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.0">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Neo~喵</h5>
+          <a href="mailto:neoneone@163.com" title="neoneone@163.com" class="mail">neoneone@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/navi" target="_blank">
+                <i class="icon icon-lg icon-link"></i>
+                导航
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="bottom">
+        <p><span>Neo~喵 &copy; 2015 - 2019</span>
+			<span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+			<span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">Licence</a></span>
+        </p>
+    </div>
+</footer>
+
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">一种便携式容器</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">一种便携式容器</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-11-23T12:53:11.000Z" itemprop="datePublished" class="page-time">
+  2019-11-23
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/深度学习/">深度学习</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#基本使用"><span class="post-toc-number">1.</span> <span class="post-toc-text">基本使用</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#转换docker镜像到singularity"><span class="post-toc-number">2.</span> <span class="post-toc-text">转换docker镜像到singularity</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-singularity-base" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">一种便携式容器</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-11-23 20:53:11" datetime="2019-11-23T12:53:11.000Z" itemprop="datePublished">2019-11-23</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/深度学习/">深度学习</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>内网环境安装docker和nvidia docker繁琐，本文介绍一种便携式容器singularity，安装简便（主要是2版本），仓库就可以直接安装。本文并介绍如何将docker镜像转换到singularity部署。</p>
+<a id="more"></a>
+<h1 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">USAGE: singularity [global options...] &lt;command&gt; [command options...] ...</span><br><span class="line"></span><br><span class="line">GLOBAL OPTIONS:</span><br><span class="line">    -d|--debug    打印调试信息</span><br><span class="line">    -h|--help     显示使用帮助</span><br><span class="line">    -s|--silent   仅打印错误</span><br><span class="line">    -q|--quiet    关闭输出信息</span><br><span class="line">       --version  显示应用版本</span><br><span class="line">    -v|--verbose  啰嗦模式</span><br><span class="line">    -x|--sh-debug 打印shell调试信息</span><br><span class="line"></span><br><span class="line">GENERAL COMMANDS:</span><br><span class="line">    help       Show additional help for a command or container    </span><br><span class="line">    selftest   Run some self tests for singularity install         </span><br><span class="line"></span><br><span class="line">CONTAINER USAGE COMMANDS:</span><br><span class="line">    exec       执行容器中的命令     </span><br><span class="line">    run        运行容器中预设命令  </span><br><span class="line">    shell      在容器中运行shell    </span><br><span class="line">    test       运行容器中test脚本   </span><br><span class="line"></span><br><span class="line">CONTAINER MANAGEMENT COMMANDS:</span><br><span class="line">    apps       List available apps within a container       </span><br><span class="line">    bootstrap  *Deprecated* use build instead     </span><br><span class="line">    build      Build a new Singularity container </span><br><span class="line">    check      Perform container lint checks </span><br><span class="line">    inspect    Display container&apos;s metadata          </span><br><span class="line">    pull       Pull a Singularity/Docker container to $PWD  </span><br><span class="line"></span><br><span class="line">COMMAND GROUPS:</span><br><span class="line">    image      Container image command group </span><br><span class="line">    instance   Persistent instance command group      </span><br><span class="line"></span><br><span class="line"></span><br><span class="line">CONTAINER USAGE OPTIONS:</span><br><span class="line">    see singularity help &lt;command&gt;</span><br><span class="line"></span><br><span class="line">For any additional help or support visit the Singularity</span><br><span class="line">website: http://singularity.lbl.gov/</span><br></pre></td></tr></table></figure>
+<h1 id="转换docker镜像到singularity"><a href="#转换docker镜像到singularity" class="headerlink" title="转换docker镜像到singularity"></a>转换docker镜像到singularity</h1><p>转换支持本地docker镜像，查看本地镜像列表通过<code>docker images</code>命令，其中quay.io/singularity/docker2singularity版本根据实际使用版本修改<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">mkdir /tmp/<span class="built_in">test</span></span><br><span class="line"><span class="comment"># convert ubuntu:14.04</span></span><br><span class="line">docker run -v /var/run/docker.sock:/var/run/docker.sock \</span><br><span class="line">-v /tmp/<span class="built_in">test</span>:/output \</span><br><span class="line">--privileged -t --rm \</span><br><span class="line">quay.io/singularity/docker2singularity:v2.4 \</span><br><span class="line">ubuntu:14.04</span><br><span class="line"><span class="comment"># convert neo-ai</span></span><br><span class="line">docker run -v /var/run/docker.sock:/var/run/docker.sock \</span><br><span class="line">-v /tmp/<span class="built_in">test</span>:/output \</span><br><span class="line">--privileged -t --rm \</span><br><span class="line">quay.io/singularity/docker2singularity:v2.4 \</span><br><span class="line">registry.cn-shenzhen.aliyuncs.com/neoneone/neo-ai</span><br></pre></td></tr></table></figure></p>
+<p>singularity运行镜像内jupyter程序<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">LANGUAGE=en sudo singularity run --nv registry.cn-shenzhen.aliyuncs.com_neoneone_neo-ai-2019-11-23-331a86220733.simg</span><br></pre></td></tr></table></figure></p>
+
+        </div>
+
+        
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/docker/">docker</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/singularity/">singularity</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/容器/">容器</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.huarenlab.com/2019/11/23/singularity-base/&title=《一种便携式容器》 — 喵&pic=http://www.huarenlab.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.huarenlab.com/2019/11/23/singularity-base/&title=《一种便携式容器》 — 喵&source=内网环境安装docker和nvidia docker繁琐，本文介绍一种便携式容器singularity，安装简便（主要是2版本），仓库就可以直接安装。本文..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.huarenlab.com/2019/11/23/singularity-base/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《一种便携式容器》 — 喵&url=http://www.huarenlab.com/2019/11/23/singularity-base/&via=http://www.huarenlab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.huarenlab.com/2019/11/23/singularity-base/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/11/27/neo-ai-lab/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">深度学习环境镜像</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/11/06/vott-neon/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">图像视频标注工具</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.huarenlab.com/2019/11/23/singularity-base/&title=《一种便携式容器》 — 喵&pic=http://www.huarenlab.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.huarenlab.com/2019/11/23/singularity-base/&title=《一种便携式容器》 — 喵&source=内网环境安装docker和nvidia docker繁琐，本文介绍一种便携式容器singularity，安装简便（主要是2版本），仓库就可以直接安装。本文..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.huarenlab.com/2019/11/23/singularity-base/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《一种便携式容器》 — 喵&url=http://www.huarenlab.com/2019/11/23/singularity-base/&via=http://www.huarenlab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.huarenlab.com/2019/11/23/singularity-base/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJElEQVR42u3aQU7DQAwF0N7/0mWLBEy+7RQpMy8rRCHxy8K1PX694uv97fr5m/XVu+frExcGBsZjGUkQvbDWT1k/PY8NAwPjHMZfD578TS/5Vp+LgYGBkYeYJ8d1uBgYGBj3MtZ3SP4352FgYGAkzWQSyrqh7SXfm3txDAyMBzLyqfv///yR8w0MDIxHMSaN6CRp3hwVBgbG1ow8wSXjs6QozI8qq8sfGBgYezPyFJkXc8niRT6YKxSLGBgYBzDuKu8mKTtvni9mhxgYGFswkuAmx5N5cKPRGwYGxgGMXiNafRH5ulhzzQIDA+MYRj5KW5N6h5HNMRwGBsaRjHw0Xy0iey/lYvyHgYFxDGPS4uZFYWH+l389YGBgHMDoDdqSpFldtsiPCn7ZFsHAwNiUkXycNKtzWG8JAwMD4wRGbzSWF3l5Ys1f30WFi4GBsR2jd7sEUz28nIzwMDAw9mb0Wse8HZ0M2gojPAwMjK0ZyQFAteDrhZUUjhdPwcDAOIyRh54Xgr2iMC9JMTAwzmH0YMnDqmm9SsLAwDiBkY+95q3pxcJEsNiBgYFxDuNdvHrNZ75SVm5cqzUpBgbGAxm35exiIs7PV3tpHQMDYz9G9WDytrYzbnqjEhYDA+MAxiTxVUf8k7LvYtkCAwMDoxVur9ysLm1gYGBgzEdd+eJFr3DEwMA4gdFbC5uP+HvHABgYGKcxJikvKtpayxYf+RrAwMB4HuMLGYwD8R12L1kAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="/js/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.0"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.0" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '去哪里了？';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+
+</html>

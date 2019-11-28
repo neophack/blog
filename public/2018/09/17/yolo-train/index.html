@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>yolo训练经验 | 喵</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#f976dc">
+    
+    
+    <meta name="keywords" content="yolo">
+    <meta name="description" content="yolo太难训练了啊，动不动就nan，超参选择对模型是否收敛影响挺大的，本文分享我在训练yolo的一些经验">
+<meta name="keywords" content="yolo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="yolo训练经验">
+<meta property="og:url" content="http://www.huarenlab.com/2018/09/17/yolo-train/index.html">
+<meta property="og:site_name" content="喵">
+<meta property="og:description" content="yolo太难训练了啊，动不动就nan，超参选择对模型是否收敛影响挺大的，本文分享我在训练yolo的一些经验">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-04-13T01:52:14.044Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="yolo训练经验">
+<meta name="twitter:description" content="yolo太难训练了啊，动不动就nan，超参选择对模型是否收敛影响挺大的，本文分享我在训练yolo的一些经验">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.7.0">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide">
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Neo~喵</h5>
+          <a href="mailto:neoneone@163.com" title="neoneone@163.com" class="mail">neoneone@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/">
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives">
+                <i class="icon icon-lg icon-archives"></i>
+                文章
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags">
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories">
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/navi" target="_blank">
+                <i class="icon icon-lg icon-link"></i>
+                导航
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+  <footer class="footer">
+    <div class="bottom">
+        <p><span>Neo~喵 &copy; 2015 - 2019</span>
+			<span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+			<span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">Licence</a></span>
+        </p>
+    </div>
+</footer>
+
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">yolo训练经验</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">yolo训练经验</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2018-09-17T11:25:51.000Z" itemprop="datePublished" class="page-time">
+  2018-09-17
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/深度学习/">深度学习</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#YOLOv3为例"><span class="post-toc-number">1.</span> <span class="post-toc-text">YOLOv3为例</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-yolo-train" class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">yolo训练经验</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2018-09-17 19:25:51" datetime="2018-09-17T11:25:51.000Z" itemprop="datePublished">2018-09-17</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/深度学习/">深度学习</a></li></ul>
+
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>yolo太难训练了啊，动不动就nan，超参选择对模型是否收敛影响挺大的，本文分享我在训练yolo的一些经验</p>
+<a id="more"></a>
+<h2 id="YOLOv3为例"><a href="#YOLOv3为例" class="headerlink" title="YOLOv3为例"></a>YOLOv3为例</h2><p>先说yolov3首先要有张8GB以上的显卡，否则很难收敛。tiny-yolov3建议4G以上显存。</p>
+<p>将batch设为64，subdivisions设为16，真实的batchsize为batch/subdivisions=4。显存主要是和真实的batchsize挂钩，设置大了要担心显存是否够用，但训练初期能够很好的收敛。</p>
+<p>learning_rate设置过大训练会很快发散，在fine_tune模型时learning_rate为配置文件所设置的值，不是fine_tune模型时learning_rate为最大的学习率，训练过程真实的学习率会慢慢变大直到等于所设值。在训练一段时间后，loss值在很长的一段时间都在某个值附近徘徊，需要将learning_rate设置更小的值。总结learning_rate的值应该先增大再减小，可以通过steps和scales配置比率。</p>
+<p>训练观察是否收敛，loss很快变小再在某个值附近徘徊；obj先变小后变大最后趋近1；召回率.5R会变大直到1，接着.75R也会有很多1；class和IOU会慢慢接近1。</p>
+<p>训练测试<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">.\darknet detector map .\data\voc.data .\cfg\yolov3.cfg .\backup\yolov3_271604.weights</span><br></pre></td></tr></table></figure></p>
+<p>结果包含每个类别的AP值，mAP值、精度、召回率、TP数量、FP数量、FN数量、平均IOU等。</p>
+<p>模型输入图像尺寸和mask、anchors参数要对应，根据训练数据实际框大小的分布来确定值。在训练时候不会在某个尺度的框一直出现count:0的结果，才能最大化利用其尺度信息。</p>
+<p>如果觉得三个scale不够用，可以将最后增加一个尺度，模仿原始模型文件写即可，注意合并要用第11层。mask、anchors参数也要添加更多的数据，9-&gt;12。</p>
+<p>声明：如有错误或者侵权请邮箱联系我</p>
+
+        </div>
+
+        
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/yolo/">yolo</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.huarenlab.com/2018/09/17/yolo-train/&title=《yolo训练经验》 — 喵&pic=http://www.huarenlab.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.huarenlab.com/2018/09/17/yolo-train/&title=《yolo训练经验》 — 喵&source=yolo太难训练了啊，动不动就nan，超参选择对模型是否收敛影响挺大的，本文分享我在训练yolo的一些经验" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.huarenlab.com/2018/09/17/yolo-train/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《yolo训练经验》 — 喵&url=http://www.huarenlab.com/2018/09/17/yolo-train/&via=http://www.huarenlab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.huarenlab.com/2018/09/17/yolo-train/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2018/10/30/caffe-cuda9-ubuntu1804/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Ubuntu18.04LTS+cuda9.0+caffe(old repo老版本)安装踩坑</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2018/06/06/label-transfer/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">深度学习常用标签转换</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://www.huarenlab.com/2018/09/17/yolo-train/&title=《yolo训练经验》 — 喵&pic=http://www.huarenlab.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://www.huarenlab.com/2018/09/17/yolo-train/&title=《yolo训练经验》 — 喵&source=yolo太难训练了啊，动不动就nan，超参选择对模型是否收敛影响挺大的，本文分享我在训练yolo的一些经验" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://www.huarenlab.com/2018/09/17/yolo-train/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《yolo训练经验》 — 喵&url=http://www.huarenlab.com/2018/09/17/yolo-train/&via=http://www.huarenlab.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://www.huarenlab.com/2018/09/17/yolo-train/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACHklEQVR42u3aQU7EMAwF0Ln/pQeJFRKi/B8XpCYvqwo6aV4Wlh3n9YrH+3N8/0s+fprz63+v379hYGBgPJaRfP76OVlQvujr+X+kYmBgHMC4DrLJJ69/225BPj8GBgZGMnWbGrYBHQMDA2Mt4OZJ4V1pKAYGBkYydbLE9jSsTR9vqMUxMDAeyGgbA//5/If9DQwMjIcw5m3I69K0ffO9NDAwMPZmXB+ftQu9Tvja1mY+JwYGxt6MeeGaLzcPuHUQx8DA2Jqxlt5NQmS+HWtBHwMD4zRG3gxoL1isJYgYGBgnM9qrEmu/WruWUTRKMTAwNmW0y00WN7/A0QZfDAyMvRlr5WvLmNyXaL+LgYGxK6O91pAnefls7QEcBgbGaYwk5VorUCeNAQwMDIy7zqzm5e7ki9FOYGBgbMFoS83J0X8biOsMFwMDY2tG3jJMAuJ1WbsWWH8J2RgYGIcx8nZj20JomxBFgwEDA+MAxhqvDdxJCM5bDhgYGCcw7gqF7SXUSfvhNd9vDAyMBzLyojFvRuYztO/8cl6IgYGxHePvSsp8tsmmYGBgnMB4lyMvPtuQOmotYGBgbM3IR9s2yMvXyaVVDAyMcxhJkJ1fCGuL2Ly4xcDAOIeRB9mWtFY2t2EaAwMDI0/R5sVnm2hiYGBgtM/tJbNJCb2YGmJgYDyWkRSxk6OxNt3Mi1sMDIwTGPPGQBte55fAFjEYGBjPY3wAleki4NTxZqUAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="/js/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.7.0"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.7.0" async></script>
+
+
+
+<!-- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+});
+</script>
+
+<script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML"></script>
+
+
+
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '去哪里了？';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+
+</html>
